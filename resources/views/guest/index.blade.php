@@ -53,7 +53,7 @@
 		<p>
 			{{$post->content}}
 		</p>
-	
+	<a href="{{route('guest.posts.show', ['slug' => $post->slug])}}">Leggi di più</a>
 	</div><!-- /.blog-post -->
 	@endforeach
 
