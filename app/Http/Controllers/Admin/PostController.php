@@ -55,6 +55,10 @@ class PostController extends Controller
 
         }
 
+        // imposto lo slug partendo dal title
+        
+        $data['slug'] = Str::slug($data['title'], '-');
+
         $request->validate([
             'title' => 'required|max:255',
             'date' => 'required|date',
@@ -64,23 +68,25 @@ class PostController extends Controller
 
         // insert
 
-        $newPost = new Post();
+        // $newPost = new Post();
 
-        $newPost->title = $data['title'];
+        // $newPost->title = $data['title'];
 
-        $newPost->date = $data['date'];
+        // $newPost->date = $data['date'];
 
-        $newPost->content = $data['content'];
+        // $newPost->content = $data['content'];
 
-        $newPost->image = $data['image'];
+        // $newPost->image = $data['image'];
 
-        $newPost->slug = Str::slug($data['title'], '-');
+        // $newPost->slug = Str::slug($data['title'], '-');
 
-        $newPost->published = $data['published'];
+        // $newPost->published = $data['published'];
 
-        $newPost->save();
+        // $newPost->save();
 
         // redirect
+
+        Post::create($data);
 
         return redirect()->route('admin.posts.index');
 
