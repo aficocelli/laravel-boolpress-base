@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Post;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Str;
+use App\Tag;
 
 class PostController extends Controller
 {
@@ -34,7 +35,9 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('admin.posts.create');
+        $tags = Tag::all();
+
+        return view('admin.posts.create', compact('tags'));
     }
 
     /**
@@ -81,7 +84,11 @@ class PostController extends Controller
 
         // redirect
 
-        Post::create($data);
+        $newPost = Post::create($data);
+
+        // aggiungo i tags
+        $newPost->tags()->attach($data['tags']);
+
 
         return redirect()->route('admin.posts.index');
 
@@ -106,7 +113,9 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        return view('admin.posts.edit', compact('post'));
+        $tags = Tag::all();
+        
+        return view('admin.posts.edit', compact('post', 'tags'));
     }
 
     /**
@@ -134,6 +143,9 @@ class PostController extends Controller
         // Update
         $post->update($data);
 
+        // aggiorno i tags
+        $post->tags()->sync($data['tags']);
+
         // return
         return redirect()->route('admin.posts.show', $post);
     }
@@ -146,6 +158,8 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
+        $post->tags()->detach();
+
         $post -> delete();
 
         return redirect()->route('admin.posts.index')->with('message', 'il post è stato cancellato!');
