@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/', 'BlogController@index');
+Route::get('/', 'BlogController@index')->name('guest.posts.index');
 
 Route::get('posts/{slug}', 'BlogController@show')->name('guest.posts.show');
 
