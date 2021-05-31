@@ -7,13 +7,14 @@ use App\Post;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Str;
 use App\Tag;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
     protected $validation = [
         'date' => 'required|date',
         'content' => 'required|string',
-        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+        'image' => 'nullable|mimes:jpeg,png,jpg,gif,svg|max:2048'
     ];
 
     /**
@@ -58,6 +59,14 @@ class PostController extends Controller
         $data = $request->all();
 
         $data['published'] = !isset($data['published']) ? 0 : 1;
+
+        // upload file image
+
+        if(isset($data['image'])){
+
+            $data['image'] = Storage::disk('public')->put('images', $data['image']);
+        }
+
 
         // imposto lo slug partendo dal title
         
